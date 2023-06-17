@@ -1,0 +1,17 @@
+
+### compile
+## compile cmd;ext;comment;outputcmd;cachecmd
+##            ;   ;#      ;-o       ;
+nim c --hints:off --passc:"-O0 -pipe";.nim;#[ ]#;-o:;--nimcache:
+rustc;.rs;/* */
+gcc -O0 -pipe;.c;/* */
+g++ -O0 -pipe;.cpp;/* */
+
+### interpret
+## interpreter, ext ,comment
+##            ,     ,#       :default
+python,.py
+nim,.nims
+bash,.sh
+java,.java,/* */
+runhaskell,.hs,--
