@@ -2,12 +2,12 @@
 #import strutls,os
 func toExe(name: string): string =
   name.addFileExt ExeExt
-template `|=`(s,S:string)=
-  if s=="":s=S
-template lstrip(s:string,c=' '):string=
-  strip(s,trailing=false,chars={c})
-template splitext(fn:string):seq[string]=
-  fn.rsplit(ExtSep,1)
+template `|=`(s, S: string) =
+  if s == "": s = S
+template lstrip(s: string, c = ' '): string =
+  strip(s, trailing = false, chars = {c})
+template splitext(fn: string): seq[string] =
+  fn.rsplit(ExtSep, 1)
 #[
 #now use getAppFilename instead,which has to be placed in `when isMainModue`
 template getExePath():untyped=
@@ -18,25 +18,25 @@ template getExePath():untyped=
     os.execProcess when defined(windows):"where "&exe
                    else:"which "exe
 ]#
-template mktemp()=
+template mktemp =
   #mixin Temp
   createDir(Temp)
-template clean()=
+template clean =
   #from std/os in line 2456:os.removeDir()
   #but we don't want remove dir
   mixin Temp
   let
-    dir=Temp
-    checkdir=true
+    dir = Temp
+    checkdir = true
   for kind, path in walkDir(dir, checkDir = checkDir):
     case kind
       of pcFile, pcLinkToFile, pcLinkToDir: removeFile(path)
       of pcDir: removeDir(path, true)
-template parsecnf()=
+template parsecnf =
   if not cnfed:
-    (cdict,edict)=readcnf()
+    (cdict, edict) = readcnf()
 #[
-template parsecomment():untyped=
+template parsecomment:untyped=
   #mixin output,arg
   let
     co=arg.comment.strip()
@@ -53,20 +53,24 @@ template parsecomment():untyped=
   f.close()
 ]#
 
-template dumpOpt():untyped=
+template dumpOpt: untyped =
   echo "parsed from\n  "&CnfPath&"\n"
   for l in CnfPath.lines:
     echo l
   return
-template parseopt():untyped=  #in arun
+const clihelp = slurp"clihelp.txt"
+template parseopt: untyped = #in arun
   #mixin argc,argv,addcomment
-  var arg:string
+  var arg: string
   for i in 1..argc:
-    arg=paramStr(i)
+    arg = paramStr(i)
     case arg:
       #of "-C":addcomment=false
-      of "-d":dumpOpt()
-      of "-D":ifdel=false
-      of "--purge":removeDir Temp
-      else:argv.add arg
+      of "-d", "--dump": dumpOpt()
+      of "-D", "--no-delete": ifdel = false
+      of "-p", "--purge": removeDir Temp
+      of "-h","--help":
+        echo clihelp
+        quit()
+      else: argv.add arg
 

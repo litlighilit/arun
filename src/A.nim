@@ -1,18 +1,13 @@
 import std/[strutils, os, osproc]
 include ./util
+from ./pathconsts import CnfPath, AltCnfDir, Temp
 
 proc arun*()
-const
-  Cnffn = "Acnf.cnf"
-  #CnfPath=Cnffn.absolutePath
 when isMainModule:
-  let CnfPath = getAppFilename()/../Cnffn
   arun()
 const
   Csep = ';'
   Esep = ','
-  Home = getHomeDir()
-  Temp = Home&".aruncache"
   Ocmd = "-o"
   Comment = "#"
   POption = {poStderrToStdout, poUsePath, poEvalCommand,
@@ -28,24 +23,32 @@ type
   ]
   EDict = seq[EArgs]
 #let CnfPath=getAppFilename()/../Cnffn#paramStr(0).absolutePath.parentDir/Cnffn
-# if declared here, `CnfPath` is somehow ""(empty string)
+# if declared here, `CnfPath` will be ""(empty string)
 var
   cnfed* = false
   cdict*: CDict
   edict*: Edict
 
+template validf(fpath: var string) =
+  if not fpath.fileExists:
+    fpath = AltCnfDir/fpath.extractFilename
+    if not fpath.fileExists:
+      raise newException(IOError, fn&" doesn't exist!")
+    
 proc warnskipline(noline: Natural, line: string) =
-  var msg = "in "&Cnffn&":\n"
+  var msg = "in "&CnfPath&":\n"
   msg.add "  line " &
           $noline&": "&line&'\n'
   msg.add "  !bad format,skip this\n"
   echo msg
 
-proc readcnf(cnf: string = CnfPath): (CDict, EDict) =
+proc readcnf(fn: string = CnfPath): (CDict, EDict) =
   var
     ccmd, ext, comment, ocmd, cacmd: string
     ls: seq[string]
   var no = 1
+  var cnf = fn
+  cnf.validf
   for l in cnf.lines:
     defer: inc no
     if l == "" or l.lstrip(' ').startswith(Comment): continue
@@ -110,10 +113,10 @@ proc run*(fn: string #,addcomment=true
       p.close()
       #if addcomment:parsecomment()
       return
-  echo "no "&etype&" found in "&Cnffn
+  echo "no "&etype&" found in "&CnfPath
 
 proc arun*() =
-  mktemp()
+  mktemp
   var
     addcomment = true
     ifdel = true
@@ -127,7 +130,7 @@ proc arun*() =
     while fn != "":
       run(fn)
       fn = stdin.readline()
-    clean()
+    clean
     return
   parseopt()
   parsecnf()

@@ -1,0 +1,10 @@
+
+A: a run
+options:
+ -h|--help  :print this and exit
+ -d|--dumo  :dump the configuration file
+ -p|--purge :remove temp dir {Temp}
+ [-D|--no-delete] file... :run each file.
+    If -D, --no-delete is given, then the compiled file won't be deleted after running, useful for reuse
+      note: this doesn't affect intepreted files
+
