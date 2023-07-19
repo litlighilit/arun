@@ -2,8 +2,14 @@ import std/[strutils, os, osproc]
 include ./util
 from ./pathconsts import CnfPath, AltCnfDir, Temp
 
+const
+  CnfFn* = "arun.cnf"
+  # CnfPath is gotten in runtime
+  AltCnfDir*{.strdefine.} = "."
+  Temp*{.strdefine.} = getTempDir()&".aruncache"
 proc arun*()
 when isMainModule:
+  let CnfPath=getAppDir()/Cnffn
   arun()
 const
   Csep = ';'
@@ -22,7 +28,7 @@ type
     c, ext, comment: string
   ]
   EDict = seq[EArgs]
-#let CnfPath=getAppFilename()/../Cnffn#paramStr(0).absolutePath.parentDir/Cnffn
+#let CnfPath=getAppDir()/Cnffn#paramStr(0).absolutePath.parentDir/Cnffn
 # if declared here, `CnfPath` will be ""(empty string)
 var
   cnfed* = false
