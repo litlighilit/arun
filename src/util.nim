@@ -18,20 +18,16 @@ template getExePath():untyped=
     os.execProcess when defined(windows):"where "&exe
                    else:"which "exe
 ]#
-template mktemp =
-  #mixin Temp
-  createDir(Temp)
-template clean =
+template clean(dir: string) =
   #from std/os in line 2456:os.removeDir()
   #but we don't want remove dir
-  mixin Temp
   let
-    dir = Temp
     checkdir = true
   for kind, path in walkDir(dir, checkDir = checkDir):
     case kind
       of pcFile, pcLinkToFile, pcLinkToDir: removeFile(path)
       of pcDir: removeDir(path, true)
+
 template parsecnf =
   if not cnfed:
     (cdict, edict) = readcnf()

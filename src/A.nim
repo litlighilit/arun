@@ -1,6 +1,5 @@
 import std/[strutils, os, osproc]
 include ./util
-from ./pathconsts import CnfPath, AltCnfDir, Temp
 
 const
   CnfFn* = "arun.cnf"
@@ -122,7 +121,7 @@ proc run*(fn: string #,addcomment=true
   echo "no "&etype&" found in "&CnfPath
 
 proc arun*() =
-  mktemp
+  createDir(Temp)
   var
     addcomment = true
     ifdel = true
@@ -136,7 +135,7 @@ proc arun*() =
     while fn != "":
       run(fn)
       fn = stdin.readline()
-    clean
+    clean Temp
     return
   parseopt()
   parsecnf()
@@ -144,4 +143,4 @@ proc arun*() =
   for fn in argv:
     run(fn
     )
-  if ifdel: clean()
+  if ifdel: clean Temp
