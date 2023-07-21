@@ -1,7 +1,7 @@
 # arun
 
 ## note
-The `A` executable requires a `Acnf.cnf` in the config directory (gotten via nim's [getConfigDir()](https://nim-lang.org/docs/os.html#getConfigDir) or cwd[^1] as a configure file[^2].   
+The `A` executable requires a `Acnf.cnf` in its parent directory or cwd[^1] as a configure file[^2].   
 See `Acnf.cnf`'s comment to learn its format.  
 ## desc
 After configuring(optional),  
