@@ -1,7 +1,7 @@
 import std/[strutils, os, osproc]
 include ./util
 
-const
+const # TODO: remove double-def in arun.nimble
   CnfFn* = "arun.cnf"
   # CnfPath is gotten in runtime
   AltCnfDir*{.strdefine.} = "."
