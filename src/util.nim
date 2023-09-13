@@ -1,5 +1,13 @@
 ## for include
 #import strutls,os
+import std/macros
+macro unpack[T](l: openArray[T], vs: varargs[typed]): untyped =
+  ## [1,2].unpack(a, b) -> a=1;b=2
+  result = newStmtList()
+  for i, v in vs:
+    let ele = nnkBracketExpr.newTree(l, newLit(i))
+    result.add newAssignment(v, ele)
+
 func toExe(name: string): string =
   name.addFileExt ExeExt
 template `|=`(s, S: string) =

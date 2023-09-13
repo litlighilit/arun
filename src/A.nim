@@ -64,7 +64,7 @@ proc readcnf(fn: string = CnfPath): (CDict, EDict) =
         warnskipline(no, l)
         continue
       ls.setLen 3
-      (ccmd, ext, comment) = ls
+      ls.unpack(ccmd, ext, comment)
       comment |= Comment
       ext = ext.strip.lstrip('.')
       result[1].add (ccmd, ext, comment)
@@ -75,7 +75,7 @@ proc readcnf(fn: string = CnfPath): (CDict, EDict) =
         warnskipline(no, l)
         continue
       ls.setLen 5
-      (ccmd, ext, comment, ocmd, cacmd) = ls
+      ls.unpack(ccmd, ext, comment, ocmd, cacmd)
       ocmd |= Ocmd
       comment |= Comment
       ext = ext.strip.lstrip('.')
