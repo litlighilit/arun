@@ -14,7 +14,7 @@ binDir        = "bin"
 requires "nim >= 1.6.6"
 
 import std/os
-from std/os import `/`
+
 
 #from std/strutils import strip, splitlines
 
