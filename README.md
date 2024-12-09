@@ -1,5 +1,8 @@
 # arun
 
+## For Linux User
+`binfmt_misc` is better.
+
 ## note
 The `A` executable requires a `Acnf.cnf` in its parent directory or cwd[^1] as a configure file[^2].   
 See `Acnf.cnf`'s comment to learn its format.  
